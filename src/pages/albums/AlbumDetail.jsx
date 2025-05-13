@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Grid, 
-  Card, 
-  CardMedia, 
+import {
+  Box,
+  Typography,
+  Paper,
+  Grid,
+  Card,
+  CardMedia,
   CardContent,
   Button,
   Dialog,
@@ -26,7 +26,6 @@ import UserAvatar from '../../components/UserAvatar';
 import Pagination from '../../components/Pagination';
 import FallbackImage from '../../components/FallbackImage';
 
-// Backup image URLs by color
 const FALLBACK_IMAGES = [
   'https://via.placeholder.com/600/771796',
   'https://via.placeholder.com/600/24f355',
@@ -40,7 +39,6 @@ const FALLBACK_IMAGES = [
   'https://via.placeholder.com/600/1ee8a4',
 ];
 
-// Backup thumbnails by color
 const FALLBACK_THUMBNAILS = [
   'https://via.placeholder.com/150/771796',
   'https://via.placeholder.com/150/24f355',
@@ -73,22 +71,20 @@ const AlbumDetail = () => {
       try {
         const albumData = await getAlbumById(id);
         setAlbum(albumData);
-        
+
         const userData = await getUserById(albumData.userId);
         setUser(userData);
-        
+
         const photosData = await getPhotosByAlbumId(id);
-        
-        // Đảm bảo mỗi ảnh có URL dự phòng nếu API không trả về
+
         const processedPhotos = photosData.map((photo, index) => ({
           ...photo,
           thumbnailBackup: FALLBACK_THUMBNAILS[index % FALLBACK_THUMBNAILS.length],
           urlBackup: FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]
         }));
-        
+
         setPhotos(processedPhotos);
-        
-        // Calculate total pages
+
         setTotalPages(Math.ceil(processedPhotos.length / PAGE_SIZE));
       } catch (error) {
         console.error('Error fetching album details:', error);
@@ -110,13 +106,11 @@ const AlbumDetail = () => {
 
   const handleImageError = (photoId, isBackupFailed = false) => {
     if (isBackupFailed) {
-      // Nếu backup cũng lỗi thì đánh dấu là lỗi hoàn toàn
       setImageErrors(prev => ({
         ...prev,
         [photoId]: { primary: true, backup: true }
       }));
     } else {
-      // Chỉ đánh dấu primary bị lỗi
       setImageErrors(prev => ({
         ...prev,
         [photoId]: { ...prev[photoId], primary: true }
@@ -124,12 +118,10 @@ const AlbumDetail = () => {
     }
   };
 
-  // Hàm lấy src thích hợp cho hình ảnh
   const getPhotoSrc = (photo, isLarge = false) => {
     const errorState = imageErrors[photo.id] || {};
-    
+
     if (isLarge) {
-      // Cho ảnh lớn
       if (!errorState.primary) {
         return photo.urlBackup || photo.url;
       } else if (!errorState.backup) {
@@ -137,7 +129,6 @@ const AlbumDetail = () => {
       }
       return null;
     } else {
-      // Cho thumbnail
       if (!errorState.primary) {
         return photo.thumbnailBackup || photo.thumbnailUrl;
       } else if (!errorState.backup) {
@@ -147,7 +138,6 @@ const AlbumDetail = () => {
     }
   };
 
-  // Get current page photos
   const currentPhotos = photos.slice(
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE
@@ -158,7 +148,7 @@ const AlbumDetail = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
       <Box mb={3}>
         <Breadcrumbs aria-label="breadcrumb">
           <Link to="/albums" style={{ display: 'flex', alignItems: 'center', color: 'inherit', textDecoration: 'none' }}>
@@ -172,17 +162,17 @@ const AlbumDetail = () => {
       <Typography variant="h5" gutterBottom component="h1" sx={{ mb: 3 }}>
         Show Album
       </Typography>
-      
+
       {user && (
         <Box mb={3}>
           <UserAvatar user={user} avatarSize={50} />
         </Box>
       )}
-      
+
       <Typography variant="h6" component="h2" gutterBottom sx={{ mb: 2 }}>
         {album?.title}
       </Typography>
-      
+
       <Box mb={2} display="flex" justifyContent="space-between" alignItems="center">
         <Typography variant="body2" color="text.secondary">
           {photos.length} photos in this album
@@ -191,19 +181,19 @@ const AlbumDetail = () => {
           Page {currentPage} of {totalPages}
         </Typography>
       </Box>
-      
+
       <Grid container spacing={2}>
         {currentPhotos.map((photo) => {
           const photoSrc = getPhotoSrc(photo);
           const errorState = imageErrors[photo.id] || {};
           const hasCompleteFail = errorState.primary && errorState.backup;
-          
+
           return (
             <Grid item xs={12} sm={6} md={4} lg={3} key={photo.id}>
-              <Card 
-                sx={{ 
-                  height: '100%', 
-                  display: 'flex', 
+              <Card
+                sx={{
+                  height: '100%',
+                  display: 'flex',
                   flexDirection: 'column',
                   cursor: 'pointer',
                   transition: 'transform 0.2s',
@@ -216,7 +206,7 @@ const AlbumDetail = () => {
                 }}
                 onClick={() => handleOpenPhoto(photo)}
               >
-                <FallbackImage 
+                <FallbackImage
                   imageUrls={photo.thumbnailUrls}
                   alt={photo.title}
                   height={150}
@@ -233,14 +223,14 @@ const AlbumDetail = () => {
           );
         })}
       </Grid>
-      
+
       {totalPages > 1 && (
-        <Pagination 
-          count={totalPages} 
-          page={currentPage} 
+        <Pagination
+          count={totalPages}
+          page={currentPage}
         />
       )}
-      
+
       <Dialog
         open={!!selectedPhoto}
         onClose={handleClosePhoto}
@@ -257,20 +247,20 @@ const AlbumDetail = () => {
                 <CloseIcon />
               </IconButton>
               <Box sx={{ textAlign: 'center' }}>
-                <FallbackImage 
+                <FallbackImage
                   imageUrls={selectedPhoto.imageUrls}
                   alt={selectedPhoto.title}
                   height="60vh"
                   width="auto"
                   color={`#${selectedPhoto.color}`}
                   textColor={`#${selectedPhoto.textColor}`}
-                  imgProps={{ 
-                    style: { 
-                      maxWidth: '100%', 
+                  imgProps={{
+                    style: {
+                      maxWidth: '100%',
                       maxHeight: '70vh',
                       width: 'auto',
                       margin: '0 auto'
-                    } 
+                    }
                   }}
                 />
                 <Typography variant="h6" mt={2}>
@@ -288,4 +278,4 @@ const AlbumDetail = () => {
   );
 };
 
-export default AlbumDetail; 
+export default AlbumDetail;

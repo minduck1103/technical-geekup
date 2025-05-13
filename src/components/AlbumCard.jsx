@@ -6,7 +6,6 @@ import { getPhotosByAlbumId, getImageUrls } from '../api/api';
 import FallbackImage from './FallbackImage';
 import UserAvatar from './UserAvatar';
 
-// Lưu cache các hình ảnh đại diện album để tránh gọi API nhiều lần
 const albumCoverCache = {};
 
 const AlbumCard = ({ album, user }) => {
@@ -17,7 +16,6 @@ const AlbumCard = ({ album, user }) => {
     const fetchCoverPhoto = async () => {
       if (!album) return;
       
-      // Kiểm tra cache
       if (albumCoverCache[album.id]) {
         setCoverPhoto(albumCoverCache[album.id]);
         setLoading(false);
@@ -25,14 +23,11 @@ const AlbumCard = ({ album, user }) => {
       }
       
       try {
-        // Chỉ lấy hình ảnh đầu tiên của album làm ảnh đại diện
         const photos = await getPhotosByAlbumId(album.id);
         if (photos && photos.length > 0) {
-          // Lưu vào cache
           albumCoverCache[album.id] = photos[0];
           setCoverPhoto(photos[0]);
         } else {
-          // Nếu không có ảnh, tạo một đối tượng giả
           const dummyPhoto = {
             id: album.id,
             title: album.title,
@@ -46,7 +41,6 @@ const AlbumCard = ({ album, user }) => {
         }
       } catch (error) {
         console.error('Error fetching cover photo:', error);
-        // Tạo một đối tượng giả trong trường hợp lỗi
         const fallbackPhoto = {
           id: album.id,
           title: album.title,

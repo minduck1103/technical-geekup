@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { 
-  Box, 
-  Paper, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
   Button,
   Link as MuiLink,
@@ -44,7 +44,7 @@ const UserList = () => {
   }
 
   return (
-    <Box>      
+    <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
       <TableContainer component={Paper} elevation={0} sx={{ border: 'none', boxShadow: 'none' }}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
@@ -64,10 +64,10 @@ const UserList = () => {
                 <TableCell sx={{ pl: 0 }}>{user.id}</TableCell>
                 <TableCell>
                   <Link to={`/users/${user.id}`}>
-                    <Avatar 
-                      src={getAvatarUrl(user.name)} 
+                    <Avatar
+                      src={getAvatarUrl(user.name)}
                       alt={user.name}
-                      sx={{ 
+                      sx={{
                         cursor: 'pointer',
                         bgcolor: '#e91e63',
                         fontSize: '0.9rem',
@@ -145,4 +145,4 @@ const UserList = () => {
   );
 };
 
-export default UserList; 
+export default UserList;

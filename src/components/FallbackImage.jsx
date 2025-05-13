@@ -17,28 +17,22 @@ const FallbackImage = ({
   const [allFailed, setAllFailed] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Xử lý khi hình ảnh bị lỗi
   const handleImageError = () => {
     if (currentIndex < imageUrls.length - 1) {
-      // Thử URL tiếp theo
       setCurrentIndex(currentIndex + 1);
     } else {
-      // Đã thử hết tất cả URL
       setAllFailed(true);
     }
   };
 
-  // Theo dõi khi currentIndex thay đổi để đặt lại trạng thái
   useEffect(() => {
     setImageLoaded(false);
   }, [currentIndex]);
 
-  // Xử lý khi hình ảnh tải thành công
   const handleImageLoad = () => {
     setImageLoaded(true);
   };
 
-  // Hiển thị hình ảnh dự phòng khi tất cả URL đều lỗi
   if (allFailed && showPlaceholder) {
     return (
       <Box

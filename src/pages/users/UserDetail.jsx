@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useSearchParams } from 'react-router-dom';
-import { 
-  Box, 
-  Typography, 
-  Paper, 
-  Grid, 
-  Card, 
-  CardContent, 
+import {
+  Box,
+  Typography,
+  Paper,
+  Grid,
+  Card,
+  CardContent,
   Button,
   Link as MuiLink,
   Divider,
@@ -47,11 +47,10 @@ const UserDetail = () => {
       try {
         const userData = await getUserById(id);
         setUser(userData);
-        
+
         const albumsData = await getAlbumsByUserId(id);
         setAlbums(albumsData);
-        
-        // Calculate pagination
+
         setTotalPages(Math.ceil(albumsData.length / PAGE_SIZE));
       } catch (error) {
         console.error('Error fetching user details:', error);
@@ -63,7 +62,6 @@ const UserDetail = () => {
     fetchUserDetails();
   }, [id]);
 
-  // Filter albums for current page
   const paginatedAlbums = albums.slice(
     (currentPage - 1) * PAGE_SIZE,
     currentPage * PAGE_SIZE
@@ -74,7 +72,7 @@ const UserDetail = () => {
   }
 
   return (
-    <Box>
+    <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
       <Box mb={3}>
         <Breadcrumbs aria-label="breadcrumb">
           <Link to="/users" style={{ display: 'flex', alignItems: 'center', color: 'inherit', textDecoration: 'none' }}>
@@ -84,19 +82,19 @@ const UserDetail = () => {
           <Typography color="text.primary">Show</Typography>
         </Breadcrumbs>
       </Box>
-      
+
       <Typography variant="h5" gutterBottom component="h1" sx={{ mb: 3 }}>
         Show User
       </Typography>
-      
+
       <Box mb={3}>
         <UserAvatar user={user} avatarSize={50} />
       </Box>
-      
+
       <Typography variant="h6" gutterBottom component="h2" sx={{ mb: 4 }}>
         Albums ({albums.length})
       </Typography>
-      
+
       <TableContainer component={Paper} elevation={0} sx={{ border: 'none', boxShadow: 'none' }}>
         <Table>
           <TableHead>
@@ -139,15 +137,15 @@ const UserDetail = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      
+
       {totalPages > 1 && (
-        <Pagination 
-          count={totalPages} 
-          page={currentPage} 
+        <Pagination
+          count={totalPages}
+          page={currentPage}
         />
       )}
     </Box>
   );
 };
 
-export default UserDetail; 
+export default UserDetail;

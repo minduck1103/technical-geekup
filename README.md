@@ -24,8 +24,8 @@ A modern React application for browsing and managing photo albums and users. Thi
 
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd album-manager
+   git clone <https://github.com/minduck1103/technical-geekup.git>
+   cd technical-geekup
    ```
 
 2. Install dependencies:

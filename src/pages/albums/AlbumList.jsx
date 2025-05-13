@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { 
-  Box, 
-  Paper, 
-  Table, 
-  TableBody, 
-  TableCell, 
-  TableContainer, 
-  TableHead, 
-  TableRow, 
+import {
+  Box,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
   Typography,
   Button,
   Link as MuiLink,
@@ -31,39 +31,36 @@ import AlbumCard from '../../components/AlbumCard';
 const AlbumList = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const currentPage = parseInt(searchParams.get('page') || '1');
-  const viewMode = searchParams.get('view') || 'grid'; // 'grid' or 'table'
-  
+  const viewMode = searchParams.get('view') || 'grid';
+
   const [albums, setAlbums] = useState([]);
   const [users, setUsers] = useState({});
   const [loading, setLoading] = useState(true);
   const [totalPages, setTotalPages] = useState(0);
-  
-  // Số lượng hiển thị cho mỗi chế độ xem
+
   const PAGE_SIZE = {
-    grid: 12,  // Hiển thị ít hơn trong grid để nhìn đẹp hơn 
-    table: 20   // Hiển thị nhiều hơn trong table
+    grid: 12,
+    table: 20
   };
 
   useEffect(() => {
     const fetchAlbums = async () => {
       setLoading(true);
       try {
-        // Lấy số lượng phù hợp với chế độ xem hiện tại
         const pageSize = PAGE_SIZE[viewMode];
         const result = await getAlbums(currentPage, pageSize);
         setAlbums(result.data);
         setTotalPages(Math.ceil(result.total / pageSize));
-        
-        // Fetch user data for each album
+
         const userIds = [...new Set(result.data.map(album => album.userId))];
         const userPromises = userIds.map(id => getUserById(id));
         const userData = await Promise.all(userPromises);
-        
+
         const userMap = {};
         userData.forEach(user => {
           userMap[user.id] = user;
         });
-        
+
         setUsers(userMap);
       } catch (error) {
         console.error('Error fetching albums:', error);
@@ -75,11 +72,10 @@ const AlbumList = () => {
     fetchAlbums();
   }, [currentPage, viewMode]);
 
-  // Xử lý thay đổi chế độ xem
   const handleViewChange = (event, newViewMode) => {
     if (newViewMode) {
       searchParams.set('view', newViewMode);
-      searchParams.set('page', '1'); // Reset về trang 1 khi đổi chế độ xem
+      searchParams.set('page', '1');
       setSearchParams(searchParams);
     }
   };
@@ -88,21 +84,19 @@ const AlbumList = () => {
     return <Loading message="Loading albums..." />;
   }
 
-  // Hiển thị chế độ xem lưới (Grid)
   const renderGridView = () => (
     <Grid container spacing={3}>
       {albums.map(album => (
         <Grid item xs={12} sm={6} md={4} lg={3} key={album.id}>
-          <AlbumCard 
-            album={album} 
-            user={users[album.userId]} 
+          <AlbumCard
+            album={album}
+            user={users[album.userId]}
           />
         </Grid>
       ))}
     </Grid>
   );
 
-  // Hiển thị chế độ xem bảng (Table)
   const renderTableView = () => (
     <TableContainer component={Paper} elevation={0} sx={{ border: 'none', boxShadow: 'none' }}>
       <Table sx={{ minWidth: 650 }}>
@@ -155,12 +149,12 @@ const AlbumList = () => {
   );
 
   return (
-    <Box>
+    <Box sx={{ width: '100%', maxWidth: '1200px', mx: 'auto' }}>
       <Box display="flex" justifyContent="space-between" alignItems="center" mb={3}>
         <Typography variant="h5" component="h1">
           Albums
         </Typography>
-        
+
         <ToggleButtonGroup
           value={viewMode}
           exclusive
@@ -176,15 +170,14 @@ const AlbumList = () => {
           </ToggleButton>
         </ToggleButtonGroup>
       </Box>
-      
+
       <Divider sx={{ mb: 3 }} />
-      
-      {/* Hiển thị view phù hợp */}
+
       {viewMode === 'grid' ? renderGridView() : renderTableView()}
-      
-      <Box mt={4}>
-        <Pagination 
-          count={totalPages} 
+
+      <Box mt={4} display="flex" justifyContent="center">
+        <Pagination
+          count={totalPages}
           page={currentPage}
         />
       </Box>
@@ -192,4 +185,4 @@ const AlbumList = () => {
   );
 };
 
-export default AlbumList; 
+export default AlbumList;

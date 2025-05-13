@@ -1,16 +1,16 @@
 import { useState } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-import { 
-  AppBar, 
-  Toolbar, 
-  Typography, 
-  Container, 
-  Box, 
-  Drawer, 
-  List, 
-  ListItem, 
-  ListItemIcon, 
-  ListItemText, 
+import {
+  AppBar,
+  Toolbar,
+  Typography,
+  Container,
+  Box,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
   ListItemButton,
   IconButton,
   useMediaQuery,
@@ -23,7 +23,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 
-const DRAWER_WIDTH = 240;
+const DRAWER_WIDTH = 200; 
 
 const Layout = () => {
   const theme = useTheme();
@@ -44,11 +44,10 @@ const Layout = () => {
 
   return (
     <Box sx={{ display: 'flex', height: '100vh' }}>
-      {/* AppBar */}
-      <AppBar 
-        position="fixed" 
-        sx={{ 
-          backgroundColor: '#1a237e', 
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: '#ffff',
           boxShadow: 1,
           zIndex: theme.zIndex.drawer + 1,
           width: '100%'
@@ -62,27 +61,17 @@ const Layout = () => {
             edge="start"
             sx={{ mr: 2 }}
           >
-            <MenuIcon />
+            <MenuIcon sx={{ color: '#000' }} />
           </IconButton>
-          <Typography 
-            variant="h6" 
-            component={Link}
-            to="/"
-            sx={{ 
-              flexGrow: 1, 
-              fontWeight: 'bold', 
-              display: 'flex', 
-              alignItems: 'center',
-              textDecoration: 'none',
-              color: 'inherit'
-            }}
-          >
-            GEEK<Typography component="sup" sx={{ fontSize: '0.6rem', ml: '2px' }}>UP</Typography>
-          </Typography>
+          <img
+            src="https://geekup.vn/Icons/geekup-logo-general.svg"
+            alt="GEEK Up - PF GI"
+            width={100}
+            style={{ marginRight: 12 }}
+          />
         </Toolbar>
       </AppBar>
 
-      {/* Sidebar */}
       <Drawer
         variant={isMobile ? "temporary" : "permanent"}
         open={open}
@@ -107,10 +96,10 @@ const Layout = () => {
         <Toolbar />
 
         {!isMobile && (
-          <Box 
-            display="flex" 
-            justifyContent="flex-end" 
-            alignItems="center" 
+          <Box
+            display="flex"
+            justifyContent="flex-end"
+            alignItems="center"
             p={1}
             onClick={handleDrawerToggle}
             sx={{ cursor: 'pointer' }}
@@ -145,9 +134,9 @@ const Layout = () => {
               >
                 <HomeIcon />
               </ListItemIcon>
-              <ListItemText 
-                primary="Home" 
-                sx={{ 
+              <ListItemText
+                primary="Home"
+                sx={{
                   opacity: open ? 1 : 0,
                   '& .MuiTypography-root': {
                     fontWeight: isActive('/') ? 500 : 400,
@@ -180,9 +169,9 @@ const Layout = () => {
               >
                 <PhotoAlbumIcon />
               </ListItemIcon>
-              <ListItemText 
-                primary="Albums" 
-                sx={{ 
+              <ListItemText
+                primary="Albums"
+                sx={{
                   opacity: open ? 1 : 0,
                   '& .MuiTypography-root': {
                     fontWeight: isActive('/albums') ? 500 : 400,
@@ -215,9 +204,9 @@ const Layout = () => {
               >
                 <PeopleIcon />
               </ListItemIcon>
-              <ListItemText 
-                primary="Users" 
-                sx={{ 
+              <ListItemText
+                primary="Users"
+                sx={{
                   opacity: open ? 1 : 0,
                   '& .MuiTypography-root': {
                     fontWeight: isActive('/users') ? 500 : 400,
@@ -229,25 +218,44 @@ const Layout = () => {
         </List>
       </Drawer>
 
-      {/* Main content */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
-          p: 3,
-          width: { sm: `calc(100% - ${open ? DRAWER_WIDTH : 72}px)` },
-          ml: { sm: `${open ? DRAWER_WIDTH : 72}px` },
+          p: 0,
+          pl: 0,
+          width: { sm: `calc(100% - ${open ? DRAWER_WIDTH : 56}px)` },
+          ml: { sm: `${open ? DRAWER_WIDTH : 56}px` },
           transition: theme.transitions.create(['margin', 'width'], {
             easing: theme.transitions.easing.sharp,
             duration: theme.transitions.duration.enteringScreen,
           }),
           backgroundColor: '#f6f8fc',
           minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
         }}
       >
         <Toolbar />
-        <Container maxWidth="xl" sx={{ mt: 2, pb: 4 }}>
-          <Box sx={{ minHeight: 'calc(100vh - 160px)', backgroundColor: 'white', p: 3, borderRadius: 1 }}>
+        <Container
+          maxWidth="xl"
+          sx={{
+            mt: 2,
+            pb: 4,
+            pl: 0,
+            pr: 1,
+            mx: 0
+          }}>
+          <Box sx={{
+            minHeight: 'calc(100vh - 160px)',
+            backgroundColor: 'white',
+            p: 3,
+            borderRadius: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+          }}>
             <Outlet />
           </Box>
         </Container>
@@ -256,4 +264,4 @@ const Layout = () => {
   );
 };
 
-export default Layout; 
+export default Layout;

@@ -15,7 +15,7 @@ const UserAvatar = ({ user, avatarSize = 36, showInfo = true, clickable = true }
         width: avatarSize, 
         height: avatarSize,
         cursor: clickable ? 'pointer' : 'default',
-        bgcolor: '#e91e63', // Pink background similar to the template
+        bgcolor: '#e91e63',
         fontSize: avatarSize / 2.5,
         fontWeight: 'bold',
       }}
